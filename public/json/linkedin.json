@@ -1,0 +1,95 @@
+{
+    "nodes": [{
+            "id": 1,
+            "name": "user",
+            "attributes": [
+                { "name": "id", "type": "text" },
+                { "name": "User Link", "type": "text" },
+                { "name": "UserName ", "type": "text" },
+                { "name": "Info", "type": "text" },
+                { "name": "About", "type": "text" },
+                { "name": "Current Company", "type": "text" },
+                { "name": "Education", "type": "text" },
+                { "name": "Education_Info", "type": "text" },
+                { "name": "Experience", "type": "text" },
+                { "name": "Interests", "type": "number" },
+                { "name": "Location", "type": "number" }
+                
+            ]
+        },
+        {
+            "id": 2,
+            "name": "page",
+            "attributes": [
+                { "name": "id", "type": "text" },
+                { "name": "name", "type": "text" },
+                { "name": "localisation", "type": "text" },
+                { "name": "description", "type": "text" },
+                { "name": "abonnee", "type": "text" }
+
+
+            ]
+        },
+        {
+            "id": 3,
+            "name": "post",
+            "attributes":  [
+                { "name": "id", "type": "text" },
+                { "name": "Post_Text", "type": "text" },
+                { "name": "Post_Likes", "type": "text" },
+                { "name": "Post_Comments", "type": "text" },
+                { "name": "Media_Links", "type": "text" },
+                { "name": "Media_Type", "type": "text" },
+                { "name": "Date_Posted", "type": "text" }
+                
+ 
+            ]
+        },
+        {
+            "id": 4,
+            "name": "comment",
+            "attributes": [ 
+                { "name": "id", "type": "text" },
+                { "name": "comment_text", "type": "text" },
+                { "name": "nbre_likes", "type": "number" },
+                { "name": "nbre_replies", "type": "number" }
+                 
+
+            ]
+        } 
+    ],
+    "links": [
+
+        {
+            "source": 1,
+            "target": 2,
+            "name": "follow"
+        },
+        {
+            "source": 1,
+            "target": 3,
+            "name": "publish"
+        },
+        {
+            "source": 1,
+            "target": 3,
+            "name": "comment"
+        },
+        {
+            "source": 2,
+            "target": 3,
+            "name": "contains"
+        },
+        {
+            "source": 2,
+            "target": 3,
+            "name": "post_comment"
+        },
+        {
+            "source": 1,
+            "target": 4,
+            "name": "commenter"
+        }
+    ]
+
+}

@@ -1,0 +1,138 @@
+{
+    "nodes": [{
+            "id": 1,
+            "name": "user",
+            "attributes": [
+                { "name": "id", "type": "text" },
+                { "name": "Name", "type": "text" },
+                { "name": "screen_name", "type": "text" },
+                { "name": "location", "type": "text" },
+                { "name": "url", "type": "text" },
+                { "name": "description", "type": "text" },
+                { "name": "verified", "type": "boolean" },
+                { "name": "Follower_count", "type": "number" },
+                { "name": "Friend_count", "type": "number" },
+                { "name": "Contact Info", "type": "text" },
+                { "name": "Basic Info", "type": "text" } 
+             ]
+        },
+        {
+            "id": 2,
+            "name": "post",
+            "attributes": [
+                { "name": "post_id", "type": "text" },
+                { "name": "post_text", "type": "text" },
+                { "name": "reaction_count", "type": "number" },
+                { "name": "fetched_time", "type": "text" },
+                { "name": "comments", "type": "text" },
+                { "name": "image", "type": "boolean" },
+                { "name": "video", "type": "boolean" },
+                { "name": "images_description", "type": "text" },
+                { "name": "video_watches", "type": "number" },
+                { "name": "likes", "type": "number" },
+                { "name": "shares", "type": "number" }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "comment",
+            "attributes": [
+                { "name": "comment_id", "type": "text" },
+                { "name": "comment_text", "type": "text" },
+                { "name": "comment_reaction_count", "type": "text" },
+                { "name": "comment_time", "type": "text" },
+                { "name": "replies", "type": "text" },
+                { "name": "comment_image", "type": "boolean" }
+                 
+             ]
+        },
+        {
+            "id": 4,
+            "name": "comment_reply",
+            "attributes":  [
+                { "name": "comment_id", "type": "text" },
+                { "name": "comment_text", "type": "text" },
+                { "name": "reaction_count", "type": "text" },
+                { "name": "comment_time", "type": "text" },
+                { "name": "replies", "type": "text" },
+                { "name": "comment_image", "type": "boolean" }
+                 
+              ]
+        },
+        {
+            "id": 5,
+            "name": "group",
+            "attributes":  [
+                { "name": "group_id", "type": "text" },
+                { "name": "name", "type": "text" },
+                { "name": "description", "type": "text" },
+                { "name": "members", "type": "number" } 
+                
+              ]
+        },
+        {
+
+            "id": 6,
+            "name": "page",
+            "attributes":  [
+                { "name": "page_id", "type": "text" },
+                { "name": "name", "type": "text" },
+                { "name": "description", "type": "text" },
+                { "name": "members", "type": "number" } 
+                
+              ]
+        }
+        
+    ],
+    "links": [
+
+        {
+            "source": 1,
+            "target": 2,
+            "name": "publish"
+        },
+        {
+            "source": 1,
+            "target": 3,
+            "name": "commenter"
+        },
+        {
+            "source": 1,
+            "target": 4,
+            "name": "reply"
+        },
+        {
+            "source": 1,
+            "target": 5,
+            "name": "member"
+        },
+        {
+            "source": 3,
+            "target": 2,
+            "name": "comment"
+        },
+        {
+            "source": 4,
+            "target": 3,
+            "name": "reply_to_comment"
+        },
+
+        {
+            "source": 2,
+            "target": 5,
+            "name": "publish_group"
+        },
+        {
+            "source": 1,
+            "target": 6,
+            "name": "member"
+        }
+        ,
+        {
+            "source": 2,
+            "target": 5,
+            "name": "publish_page"
+        }
+    ]
+
+}
