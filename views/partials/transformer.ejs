@@ -1,0 +1,52 @@
+<style src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></style>
+
+<style>
+    .choices__inner {
+   
+   margin-top: 20px;
+ }
+</style>
+
+<style>
+ 
+    .botton {
+      margin: 0;
+      position: absolute;
+      top: 110%;
+      left: 50%;
+      -ms-transform: translate(-50%, -100%);
+      transform: translate(-50%, -100%);
+    }
+    </style>
+    
+<div class="container">
+
+    <div class="row d-flex justify-content-center mt-100">
+        <div class="col-md-6"> <select id="choices-multiple-remove-buttonpretraitement" placeholder="Select upto 5 tags" multiple>
+            
+            </select> </div>
+    </div>
+    <div class="row d-flex justify-content-center mt-100">
+        <div class="col-md-6"> <select id="choices-multiple-remove-buttontraitement" placeholder="Select upto 5 tags" multiple>
+            
+            </select> </div>
+    </div>
+    <div class="row d-flex justify-content-center mt-100">
+        <div class="col-md-6"> <select id="choices-multiple-remove-buttonenraich" placeholder="Select upto 5 tags" multiple>
+            
+            </select> </div>
+    </div>
+    <script>
+
+    id=['pretraitement','traitement','enraich']
+    for (let i = 0; i < id.length; i++) {
+        document.getElementById("choices-multiple-remove-button"+id[i]).style.visibility = 'hidden';
+
+    }
+
+    </script>
+     <style src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></style>
+
+
+
+</div>

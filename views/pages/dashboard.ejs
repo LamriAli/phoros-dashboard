@@ -1,8 +1,22 @@
+<script type="text/javascript" src='./DataTables/media/js/jquery.js'></script>
+
+<script type="text/javascript" src="./DataTables/media/js/jquery.dataTables.min.js"></script>
+
+
 <style src="Search.css"></style>
 
 <style src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></style>
 
 <style src=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css "></style>
+
+<style  src="DataTables/media/css/jquery.dataTables.min.css"></style>
+<style src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></style>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+
+
+
     
 <style>
 
@@ -51,14 +65,24 @@
                                             <h5>Search Data</h5>
                                             <div class="row g-3 mt-2">
                                                 <div class="col-md-3">
-                                                    <div class="dropdown"> <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false"> Any Status </button>
+                                                    
+                                                    <div class="dropdown"> <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false"> Any Service </button>
                                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <li><a class="dropdown-item" href="#">Rural</a></li>
-                                                            <li><a class="dropdown-item" href="#">Urban</a></li>
-                                                            <li><a class="dropdown-item" href="#">All</a></li>
+                                                            <li><a  href="#">Facebook</a></li>
+                                                            <li><a class="dropdown-item" onclick="change_api('Twitter')">Twitter</a></li>
+                                                            <li><a class="dropdown-item"onclick="change_api('Youtube')">Youtube</a></li>
+                                                            <li><a class="dropdown-item" onclick="change_api('Linkedin')">Linkedin</a></li>
+                                                            <li><a class="dropdown-item" onclick="change_api('All')">All</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
+                                                <script>
+                                                    function change_api(api)
+                                                    { 
+                                                        document.getElementById("dropdownMenuButton").textContent=api
+                                                    }
+                                                </script>
+                                                
                                                 <div class="col-md-6"> <input id="search_data" type="text" class="form-control" placeholder="Search...."> </div>
                                                 <div class="col-md-3"> <button  class="btn btn-secondary btn-block" onclick="Search_data()">Search Results</button> </div>
                                             </div>
@@ -81,6 +105,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                
+                            </div>
                             <div class=" col-xl-6 mb-5 mb-xl-0">
                                 <div class="card bg-gradient-lighter shadow">
                                     <div class="card-header bg-transparent">
@@ -95,18 +122,14 @@
                                     </div>
                                     
                                     <div class="container" id="table">
-                                        <!-- Chart -->
-                                       <!-- <div class="chart">
-                                           
-                                            <canvas id="chart-sales" height="640.7" class="chart-canvas"></canvas>
-                                        </div>-->
+                                      
 
 
                                     </div>
                                 </div>
                             </div>
                              
-                            <div class="col-xl-6 mb-12 mb-xxl-4">
+                            <div class="col-xl-6 mb-12 mb-xxl-4">   
                                 <div class="card shadow">
                                     <div style="overflow: hidden ">
                                         <!-- <script src="https://d3js.org/d3.v4.js"></script>
@@ -137,6 +160,30 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class=" col-xl-6 mb-5 mb-xl-0" id="transformation">
+                                <div class="card bg-gradient-lighter shadow">
+                                    <div class="card-header bg-transparent">
+                                        
+                                        <div class="row align-items-center" >
+                                            <div class="col" >
+                                               
+                                                <h2 class="text mb-0">Transformation</h2>
+                                            </div>
+                                            <% include ../partials/transformer %>
+                                           
+                                        </div>
+                                    </div>
+                                    
+                                   
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("transformation").style.visibility = 'hidden'
+                            </script>
+                            <div>
+
+                    
                             </div>
                                                    </div>
                       <!--  <div class="row mt-5">
@@ -287,11 +334,13 @@
                                     </div>
                                 </div>
                             </div>-->
-                        </div>
-                        <!-- Footer -->
-                        <% include ../partials/footer %>
+                       
+                       
                     </div>
         </div>
+        
+        <!-- Footer -->
+        <% include ../partials/footer %>
         <!-- Include scripts -->
-        <% include ../partials/scripts %>
+        <% include ../partials/scripts1 %>
 </body>

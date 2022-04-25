@@ -1,6 +1,5 @@
-// var d3 = require('d3v4');
-// var jsdom = require('jsdom');
-
+ 
+ 
 
 
 
@@ -546,39 +545,81 @@ function Send_Req(id)
 
      json_req={"nodes":{},"links":{}}
      
-    console.log(selected_field)
-    for (const key of Object.keys(selected_field)) {
-        
-       
-        if (selected_field[key].length>2) {
-            var a=$("#structQ-"+key+'-fields').structFilter('val')
-             
-            json_req["nodes"][key]=a
-            
-            
-        } else {
-            var a=$("#structQ-"+key+'-fields').structFilter('val')
-            link=get_source_target(key)
-            //link={"source":key,"target":key,"name":key}
-            
-            json_req["links"][key]=link
-             
-        }
-       
-
-       
-        
-    }
-    console.log(json_req)
+  
     
-    download (type_of = "text/plain", filename= "data.txt",json_req)
+    if (Object.keys(selected_field).length==0) {
+        
+        alert("-*-*-*-*-_Select Nodes or Edges_-*-*-*-*-")
+    } else {
+        
+        
+        for (const key of Object.keys(selected_field)) {
+            
+            console.log(selected_field[key][0]['type'])
+            if (selected_field[key][0]['type']=='node') {
+                var a=$("#structQ-"+key+'-fields').structFilter('val')
+                console.log(a)
+                json_req["nodes"][key]=a
+                
+                
+            } else {
+                var a=$("#structQ-"+key+'-fields').structFilter('val')
+                link=get_source_target(key)
+                //link={"source":key,"target":key,"name":key}
+                console.log(link)
+                
+                json_req["links"][key]=link
+                
+            }
+        
+
+        
+            
+        }
+        console.log(json_req)
+
+        var data_json={
+            "target":"neo4j",
+            "data":json_req
+        }
+        str_json=JSON.stringify(data_json)
+      //Send to server
+        connect_server(str_json)
+
+         
+        
+      //  download (type_of = "text/plain", filename= "data.txt",json_req)
+
+    }
+
+}
+
+
+
+
+//Function connect to server
+function connect_server(str_json)
+
+{
+
+    let xhr = new XMLHttpRequest();
+ 
+    xhr.open("POST", 'http://localhost:8088', true);
+    xhr.setRequestHeader('Content-type', 'text/plain');
+
+    xhr.send(str_json);
+
+    xhr.onload = function() {
+    console.log(xhr.response);
+    alert(xhr.response)
+}; 
 
  
 
 }
 
 
-
+//Download file
  function download (type_of = "text/plain", filename= "data.txt",data) {
      
         let body = document.body;
@@ -609,76 +650,53 @@ function get_source_target(key)
 
 ///////////////////////////////////////////////
 
-
+var data_search={}
 
 function Search_data()
 {
 
-    search_inf={"key_word":"","user_id":"","start_date":"","end_date":"","location":""}
+    search_inf={"key_word":"","user_id":"","start_date":"","end_date":"","location":"","target":""}
  
     key_word=document.getElementById("search_data").value
     start_date=document.getElementById("Date").value
     end_date=document.getElementById("Date").value
+    
+
     search_inf["key_word"]=key_word
     search_inf["start_date"]=start_date
     search_inf["end_date"]=start_date
     search_inf["location"]=location
+  
     
-     
+
     console.log(search_inf)
 
-    //send request to elastic search
- 
-    
-   /* var request = {
-        "url" : 'http://localhost:2018/',
-        "method" : "POST",
-        "origin":"*",
-        "allowHeaders":['Content-Type'],
-        "data" : search_inf
+    data={
+        "index_name":"g",
+        "key":key_word,
+        "attribute":"eee",
+        "Attribute_searched":search_inf
     }
-    alert("sending....")
-    $.ajax(request).done(function(response){
-        alert("Data Updated Successfully!");
-        window.history.back
-    })*/
-
-    /*let url = "https://reqbin.com/echo/post/json";
-
-let xhr = new XMLHttpRequest();
-let data = `{
-    "Id": 78912,
-    "Customer": "Jason Sweet",
-    "Quantity": 1,
-    "Price": 18.00
-  }`;
-xhr.open("POST", data);
-xhr.onload = () => {
-    console.log(xhr.response);
-}
-
-
-xhr.setRequestHeader("Accept", "application/json");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.responseType = 'text';
-
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-       console.log( xhr)
-      console.log(xhr.responseText);
-   }};
 
 
 
-xhr.send(data);*/
-
-
-
-let data=[]
+    var data_json={
+        "target":"elasticsearch",
+        "data":data
+    }
+    str_json=JSON.stringify(data_json)
+  //Send to server
+    connect_server(str_json)
+//Create table of result
     
-Display_result()
+    Display_result()
+    Add_transf()
+
 
 }
+
+ 
+///Display data from elastic search as table.
 
 function Display_result()
 {
@@ -749,8 +767,13 @@ function Display_result()
             
         ]
     }
+    data_search=result
     var tab =result["records"]
     data=tab
+    //Statistic 
+    document.getElementById("Statistics").innerHTML=data.length
+
+
 
         if (document.getElementsByTagName("table")['length']!=0) {
             
@@ -764,10 +787,10 @@ function Display_result()
       
         // creates a <table> element and a <tbody> element
         var tbl = document.createElement("table");
-        tbl.setAttribute("id","res")
+        tbl.setAttribute("id","tab")
 
 
-        tbl.setAttribute("class","table")
+        tbl.setAttribute("class","datatable table table-striped table-bordered")
         var thead=document.createElement("thead")
         var tr=document.createElement("tr")
         console.log()
@@ -776,7 +799,7 @@ function Display_result()
             
             var th=document.createElement("th")
             th.setAttribute("scope","col")
-            var cellText = document.createTextNode(Object.keys(result["records"][0] )[j]);
+            var cellText = document.createTextNode(Object.keys(result["records"][0])[j]);
             th.appendChild(cellText);
             tr.appendChild(th);
 
@@ -790,9 +813,9 @@ function Display_result()
         for (var i = 0; i < tab.length; i++) {
           // creates a table row
           var row = document.createElement("tr");
-          row.setAttribute("class","table-active")
-            tab_att=["texte","Api_type","Position","Time"]
-            console.log("aaaaaaaaaaaa")
+          row.setAttribute("class","gradeA")
+          tab_att=["text","Api_type","Position","Time"]
+            
           for (var j = 0; j < tab_att.length; j++) {
             // Create a <td> element and a text node, make the text
             // node the contents of the <td>, and put the <td> at
@@ -803,7 +826,8 @@ function Display_result()
                  
                 var cellText = document.createTextNode(tab[i][tab_att[j]]["id"]);
                 cell.appendChild(cellText);
-                cell.setAttribute("onclick","func("+i+")")
+                cell.setAttribute("onclick","Marker("+i+")")
+                cell.setAttribute("class","center")
 
                 row.appendChild(cell);
 
@@ -828,7 +852,7 @@ function Display_result()
         // appends <table> into <body>
         body.appendChild(tbl);
         // sets the border attribute of tbl to 2;
-        tbl.setAttribute("border", "2");
+       // tbl.setAttribute("border", "2");
 
 
         for (let i = 0; i <  result["records"].length; i++) {
@@ -841,6 +865,9 @@ function Display_result()
 
             
         }
+        $(document).ready(function () {
+            $('#tab').DataTable();
+        });
       
       
       
@@ -848,7 +875,58 @@ function Display_result()
 
 
 }
-function func(i)
+
+
+//Add transformer function
+function Add_transf()
+{
+   
+
+    id=['pretraitement', 'traitement' ,'enraich']
+    id_instances=[['Remove Ponctuation','Remove Stop Word','tokenisation','Stemming'],['Traduction','Feature Extraction'],['Sentiment Analysis','Topic Detection']]
+    for (let i = 0; i < id.length; i++) {
+         div=document.getElementById("choices-multiple-remove-button"+id[i])
+         for (let j = 0; j < id_instances[i].length; j++) {
+            let p = document.createElement("option")
+            p.setAttribute('value',id_instances[i][j])
+            p.setAttribute('textContent',id_instances[i][j])
+            div.append(p)
+          
+         }
+         
+        
+    }
+
+    for (let i = 0; i < id.length; i++) {
+    $(document).ready(function(){
+
+        var multipleCancelButton = new Choices('#choices-multiple-remove-button'+id[i], {
+        removeItemButton: true,
+        maxItemCount:10,
+        searchResultLimit:10,
+        renderChoiceLimit:10
+       });
+        
+        
+        });
+
+    }
+    document.getElementById("transformation").style.visibility = 'visible'
+    btn=document.createElement("button");
+    btn.innerHTML = "Download";
+    btn.setAttribute("class","botton")
+    btn.addEventListener("click", function () {
+    alert(" Dowload");
+    download (type_of = "text/plain", filename= "data.txt",data_search)
+    get_transformation()
+  
+
+    });
+    document.getElementById("transformation").appendChild(btn);
+
+}
+
+function Marker(i)
 {
     var markers = [{long: data[i]["Position"]["long"], lat:data[i]["Position"]["latitude"], text: data[i]["text"], api: data[i]["Api_type"],id:data[i]["Position"]["id"]}]
     const svg = d3.select(".map svg");
@@ -879,16 +957,7 @@ function get_max(tab,id)
 
 
 
-/*var markers = [
-    {long: 9.083, lat:15, group: "A", size: 34}, // corsica
-    {long: 7.26, lat: 20, group: "A", size: 14}, // nice
-    {long: 2.349, lat:18, group: "B", size: 87}, // Paris
-    {long: 10.397, lat: 23, group: "B", size: 41}, // Hossegor
-    {long: 3.075, lat: 28, group: "C", size: 78}, // Lille
-    {long: 5.83, lat:17, group: "C", size: 12} // Morlaix
-  ];*/
 
-  
 function color_place(id,maxid,max)
 {   
     var col=document.getElementById(id);
@@ -970,29 +1039,16 @@ tooltip1_data={"nom":"ali","prenom":"lmr"}
 
 }
 
+function get_transformation()
+{
+    preprocess=d=document.getElementById("choices-multiple-remove-buttonpretraitement").textContent
+    process=d=document.getElementById("choices-multiple-remove-buttontraitement").textContent
+    enraich=d=document.getElementById("choices-multiple-remove-buttonenraich").textContent
+   // alert(enraich+process)
 
+    
+}
 
 ////////////////////////////////////////////////
-mapper1();
-//grapher();
-// structQuery();
-
-
-// console.log("finished")
-
-//     return svg;
-
-// }
-
-
-
-// module.exports = {
-//     mapBuilder
-// }
-
-
-
-
-
-
+mapper1()
 
